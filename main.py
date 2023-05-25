@@ -1,5 +1,11 @@
 from Parcial1 import *
 from Validaciones.validaciones_texto import *
+from Funciones.funciones_encontrar import *
+from Funciones.funciones_mostrar import *
+from Archivos.archivos import leer_archivo
+from menu import *
+import constantes
+
 
 def main():
     lista_jugadores = leer_archivo("dt", "json")
@@ -12,7 +18,7 @@ def main():
                 imprimir_jugadores(lista_jugadores)
             case 2:
                 indice = input("Ingrese un índice.")
-                indice = validar_indice(indice)
+                indice = validar_indice(indice, cantidad_jugadores)
                 estadisticas_por_indice(lista_jugadores, indice)
             case 3:
                 indice = input("Ingrese un índice.")
@@ -23,11 +29,11 @@ def main():
                 validar_nombre(nombre)
                 mostrar_logros_por_nombre(lista_jugadores, nombre)
             case 5:
-                imprimir_promedio_y_estadistica("promedio_puntos_por_partido", lista_jugadores)
-                
+                mostrar_promedio_puntos_por_partido_ascendente(lista_jugadores)
             case 6:
-                pass
-
+                nombre = input("Ingrese un nombre: ")
+                validar_nombre(nombre, True)
+                mostrar_jugador_es_de_salon_fama(nombre, lista_jugadores)
             case 7:
                 pass
 
