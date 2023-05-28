@@ -1,4 +1,3 @@
-from Parcial1 import *
 from Validaciones.validaciones_texto import *
 from Funciones.funciones_encontrar import *
 from Funciones.funciones_mostrar import *
@@ -81,7 +80,9 @@ def main():
             case 20:
                 valor = pedir_valor_para_promedio()                
                 mostrar_jugadores_promedian_mas_porcentaje_tiros_campo_por_posicion(lista_jugadores, valor)
-
+            case 21:
+                guardar_ranking_jugadores(lista_jugadores, lista_rankings)
+                
             case 0:
                 continuar = False
 

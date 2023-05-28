@@ -1,7 +1,7 @@
 from Funciones.funciones_calcular import *
 from Funciones.funciones_encontrar import *
 from Pantalla.imprimir import imprimir
-from Archivos.archivos import guardar_jugador_a_csv
+from Archivos.archivos import *
 
 def imprimir_logros(jugador):
     logros = jugador[constantes.LOGROS]
@@ -69,11 +69,12 @@ def mostrar_jugadores_promedian_mas_porcentaje_tiros_campo_por_posicion(lista_ju
     if len(jugadores) == 0:
         print("No hay jugadores que superen ese porcentaje de tiros de campo.")
     else:
-        jugadores = ordenar_por_key(jugadores, constantes.POSICION, True)
+        jugadores = ordenar_por_key(jugadores, constantes.POSICION)
         imprimir_jugadores_y_estadisticas(jugadores, [constantes.PORCENTAJE_TIROS_DE_CAMPO], True, True)
 
 def guardar_ranking_jugadores(lista_jugadores, lista_rankings):
     diccio_ranking = obtener_jugadores_rankeados_por_estadisticas(lista_jugadores, lista_rankings)
+    guardar_rankings_a_csv(diccio_ranking, lista_rankings)
 
 def mostrar_jugador_mas_temporadas_jugadas(lista_jugadores):
     jugador = obtener_jugador_mas_temporadas_jugadas(lista_jugadores)
@@ -117,14 +118,14 @@ def mostrar_promedio_puntos_por_partido_ascendente(lista_jugadores):
     imprimir_promedio_y_estadistica(constantes.PROMEDIO_PUNTOS_POR_PARTIDO, lista_jugadores, True)
 
 def mostrar_promedio_puntos_por_partido_excluyendo_peor(lista_jugadores):
-    lista_jugadores = ordenar_por_estadistica(lista_jugadores, constantes.PROMEDIO_PUNTOS_POR_PARTIDO, True)
+    lista_jugadores = ordenar_por_estadistica(lista_jugadores, constantes.PROMEDIO_PUNTOS_POR_PARTIDO)
     lista_filtrada = lista_jugadores[1:]
     promedio = get_promedio_por_clave(constantes.PROMEDIO_PUNTOS_POR_PARTIDO,lista_filtrada)
     imprimir([f"El promedio de puntos por partido del equipo excluyendo al peor jugador es {promedio}"])
 
 def mostrar_estadisticas_y_guardar(jugadores, indice):
     estadisticas_por_indice(jugadores, indice)
-    guardar_jugador_a_csv(jugadores[indice])
+    guardar_jugador_a_csv(jugadores[indice], True)
 
 def mostrar_jugador_con_mas_logros(lista_jugadores):
     jugador = obtener_jugador_con_mas_logros(lista_jugadores)

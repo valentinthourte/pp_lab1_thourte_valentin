@@ -28,6 +28,7 @@ def imprimir_menu_parcial():
     "18. Mostrar jugadores con porcentaje de tiros triples superior a un valor dado.",
     "19. Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas.",
     "20. Mostrar jugadores ordenados por posición en la cancha con porcentaje de tiros de campo superior a un valor dado.",
+    "21. Guardar rankings de jugadores a csv.",
     "0. Salir"
     ]
     imprimir_menu(lista_opciones)

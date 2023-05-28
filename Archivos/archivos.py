@@ -50,12 +50,12 @@ def sanitizar(texto):
         return texto.replace(",", ";").replace("\n", "@")
     
 
-def parse_jugador_a_csv(jugador):
-    linea_csv = f"{jugador['nombre']},{jugador['posicion']},"
-    estadisticas = jugador["estadisticas"]
-    for estadistica in estadisticas:
-        estadistica_sanitizada = sanitizar(estadisticas[estadistica])
-        linea_csv = f"{linea_csv}{estadistica_sanitizada},"
+def parse_jugador_a_csv(jugador, clave_guardar):
+    linea_csv = f"{jugador[constantes.NOMBRE]},{jugador[constantes.POSICION]},"
+    claves = jugador[clave_guardar]
+    for clave in claves:
+        clave_sanitizada = sanitizar(claves[clave])
+        linea_csv = f"{linea_csv}{clave_sanitizada},"
     return f"{linea_csv[:-1]}\n"
 
 def guardar_jugador_a_csv(jugador, usar_jugador_para_archivo = False):
@@ -65,13 +65,18 @@ def guardar_jugador_a_csv(jugador, usar_jugador_para_archivo = False):
         if grabar_cabeceras:
             linea_cabeceras = obtener_cabeceras_de_jugador(jugador)
             archivo.write(linea_cabeceras)
-        linea = parse_jugador_a_csv(jugador)
+        linea = parse_jugador_a_csv(jugador, constantes.ESTADISTICAS)
         archivo.write(linea)
 
 def obtener_cabeceras_de_jugador(jugador):
     linea = ""
     for clave in jugador:
-        linea = f"{linea},{clave}"
+        if type(jugador[clave]) == dict:
+            for elemento in jugador[clave]:
+                linea = f"{linea},{elemento}"
+        else:
+            linea = f"{linea},{clave}"
+            linea = linea[1:]
     return f"{linea}\n"
 
 def obtener_nombre_y_apellido(jugador):
@@ -85,3 +90,17 @@ def nombre_archivo_para_csv(jugador, usar_jugador_para_archivo):
     else:
         nombre_archivo = "estadisticas.csv"
     return nombre_archivo
+
+def guardar_rankings_a_csv(diccio_ranking, lista_rankings):
+    lista_rankings = sanitizar_lista(lista_rankings)
+    cabeceras = ",".join(lista_rankings)
+    with open("rankings.csv", "w") as archivo:
+        archivo.write(f"{cabeceras}\n")
+        for jugador in diccio_ranking:
+            linea = parse_jugador_a_csv(jugador, constantes.RANKINGS)
+            archivo.write(linea)
+
+def sanitizar_lista(lista):
+    for i in range(len(lista)):
+        lista[i] =  sanitizar(parsear_dato(lista[i]))
+    return lista

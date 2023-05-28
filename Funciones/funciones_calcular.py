@@ -1,7 +1,7 @@
 from Pantalla.imprimir import imprimir
 import constantes
 
-def ordenar_por_key(lista, clave, ascendente):
+def ordenar_por_key(lista, clave, ascendente = True):
     ordenar = True
     while ordenar:
         ordenar = False
@@ -14,7 +14,7 @@ def ordenar_por_key(lista, clave, ascendente):
                 ordenar = True
     return lista
 
-def ordenar_por_estadistica(lista, clave, ascendente):
+def ordenar_por_estadistica(lista, clave, ascendente = True):
     ordenar = True
     while ordenar:
         ordenar = False
@@ -36,6 +36,12 @@ def obtener_nombre_y_datos(jugador, lista_datos):
         linea = f"{linea} - {obtener_dato(jugador, dato)}"
     return f"{linea}\n"
 
+def obtener_nombre_y_rankings(jugador, rankings):
+    linea = obtener_nombre(jugador)
+    for ranking in rankings:
+        linea = f"{linea} - {clave_y_ranking_parseadas(jugador, ranking)}"
+    return linea
+
 def obtener_nombre_y_estadisticas(jugador, claves):
     linea = obtener_nombre(jugador)
     for clave in claves:
@@ -50,6 +56,11 @@ def obtener_clave_y_dato(diccio, dato):
 
 def clave_y_estadistica_parseadas(jugador, clave):
     dato = obtener_dato(jugador[constantes.ESTADISTICAS], clave)
+    clave_parseada = parsear_dato(clave)
+    return f"{clave_parseada}: {dato}"
+
+def clave_y_ranking_parseadas(jugador, clave):
+    dato = obtener_dato(jugador[constantes.RANKINGS], clave)
     clave_parseada = parsear_dato(clave)
     return f"{clave_parseada}: {dato}"
 
@@ -155,12 +166,13 @@ def obtener_jugadores_comparados_estadistica(lista_jugadores, valor, estadistica
     return jugadores_devolver
 
 def obtener_jugadores_rankeados_por_estadisticas(lista_jugadores, lista_rankings):
-
     for estadistica in lista_rankings:
-        lista_ordenada = ordenar_por_estadistica(lista_jugadores, estadistica, True)
-        for i in range (len(lista_ordenada) - 1):
+        lista_ordenada = ordenar_por_estadistica(lista_jugadores, estadistica, False)
+        for i in range(len(lista_ordenada)):
             jugador = lista_ordenada[i]
             if not constantes.RANKINGS in jugador:
                 jugador[constantes.RANKINGS] = {}
-            jugador[constantes.RANKINGS][estadistica] = i
+            jugador[constantes.RANKINGS][estadistica] = i + 1
+
+    return lista_ordenada
 
