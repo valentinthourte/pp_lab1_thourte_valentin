@@ -58,8 +58,8 @@ def parse_jugador_a_csv(jugador):
         linea_csv = f"{linea_csv}{estadistica_sanitizada},"
     return f"{linea_csv[:-1]}\n"
 
-def guardar_jugador_a_csv(jugador):
-    nombre_archivo = "estadisticas.csv"
+def guardar_jugador_a_csv(jugador, usar_jugador_para_archivo = False):
+    nombre_archivo = nombre_archivo_para_csv(jugador, usar_jugador_para_archivo)
     grabar_cabeceras = not os.path.exists(nombre_archivo)
     with open(nombre_archivo, "a") as archivo:
         if grabar_cabeceras:
@@ -73,3 +73,15 @@ def obtener_cabeceras_de_jugador(jugador):
     for clave in jugador:
         linea = f"{linea},{clave}"
     return f"{linea}\n"
+
+def obtener_nombre_y_apellido(jugador):
+    lista = jugador["nombre"].split(" ")
+    return lista[0], lista[1]
+
+def nombre_archivo_para_csv(jugador, usar_jugador_para_archivo):
+    if usar_jugador_para_archivo:
+        nombre, apellido = obtener_nombre_y_apellido(jugador)
+        nombre_archivo = f"estadisticas_{nombre}_{apellido}.csv"
+    else:
+        nombre_archivo = "estadisticas.csv"
+    return nombre_archivo

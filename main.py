@@ -7,9 +7,23 @@ from menu import *
 import constantes
 
 
+
+def pedir_indice(cantidad_jugadores):
+    indice = input("Ingrese un índice.")
+    return validar_indice(indice, cantidad_jugadores)
+
+def pedir_nombre(nombre_completo):
+    nombre = input("Ingrese un nombre: ")
+    return validar_nombre(nombre, nombre_completo)
+
+def pedir_valor_para_promedio():
+    valor = input("Ingrese un valor para el promedio: ")
+    return validar_valor(valor)
+
 def main():
     lista_jugadores = leer_archivo("dt", "json")
     cantidad_jugadores = len(lista_jugadores)
+    lista_rankings = [constantes.PUNTOS_TOTALES, constantes.REBOTES_TOTALES, constantes.ASISTENCIAS_TOTALES, constantes.ROBOS_TOTALES]
     continuar = True
     while continuar:
         opcion = pedir_opcion_hasta__que_sea_valida()
@@ -17,67 +31,63 @@ def main():
             case 1:
                 imprimir_jugadores(lista_jugadores)
             case 2:
-                indice = input("Ingrese un índice.")
-                indice = validar_indice(indice, cantidad_jugadores)
+                indice = pedir_indice(cantidad_jugadores)
                 estadisticas_por_indice(lista_jugadores, indice)
             case 3:
-                indice = input("Ingrese un índice.")
-                indice = validar_indice(indice, cantidad_jugadores)
+                indice = pedir_indice(cantidad_jugadores)
                 mostrar_estadisticas_y_guardar(lista_jugadores, indice)
             case 4:
-                nombre = input("Ingrese un nombre: ")
-                validar_nombre(nombre)
+                nombre = pedir_nombre(False)
                 mostrar_logros_por_nombre(lista_jugadores, nombre)
             case 5:
                 mostrar_promedio_puntos_por_partido_ascendente(lista_jugadores)
             case 6:
-                nombre = input("Ingrese un nombre: ")
-                validar_nombre(nombre, True)
+                nombre = pedir_nombre(True)
                 mostrar_jugador_es_de_salon_fama(nombre, lista_jugadores)
             case 7:
-                pass
-
+                mostrar_jugador_mayor_rebotes_totales(lista_jugadores)
             case 8:
-                pass
-
+                mostrar_jugador_mayor_porcentaje_tiros_campo(lista_jugadores)
             case 9:
-                pass
-
+                mostrar_jugador_mayor_asistencias(lista_jugadores)
             case 10:
-                pass
-
+                valor = pedir_valor_para_promedio()
+                mostrar_jugadores_promedian_mas_puntos_por_partido(lista_jugadores, valor)
             case 11:
-                pass
-
+                valor = pedir_valor_para_promedio()
+                mostrar_jugadores_promedian_mas_rebotes_por_partido(lista_jugadores, valor)
             case 12:
-                pass
-
+                valor = pedir_valor_para_promedio()
+                mostrar_jugadores_promedian_mas_asistencias_por_partido(lista_jugadores, valor)
             case 13:
-                pass
-
+                mostrar_jugador_mayor_robos_totales(lista_jugadores)
             case 14:
-                pass
-
+                mostrar_jugador_mayor_bloqueos_totales(lista_jugadores)
             case 15:
-                pass
+                valor = pedir_valor_para_promedio()
+                mostrar_jugadores_promedian_mas_porcentaje_tiros_libres(lista_jugadores, valor)
 
             case 16:
-                pass
+                mostrar_promedio_puntos_por_partido_excluyendo_peor(lista_jugadores)
 
             case 17:
-                pass
-
-            case 18:
-                pass
-
+                mostrar_jugador_con_mas_logros(lista_jugadores)
+            case 18:    
+                valor = pedir_valor_para_promedio()
+                mostrar_jugadores_promedian_mas_porcentaje_tiros_triples(lista_jugadores, valor)
             case 19:
-                pass
+                mostrar_jugador_mas_temporadas_jugadas(lista_jugadores)
 
             case 20:
-                pass
+                valor = pedir_valor_para_promedio()                
+                mostrar_jugadores_promedian_mas_porcentaje_tiros_campo_por_posicion(lista_jugadores, valor)
+
             case 0:
                 continuar = False
+
         input("Presione enter para continuar.")
 
 main()
+
+
 

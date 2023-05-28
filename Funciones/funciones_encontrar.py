@@ -8,7 +8,7 @@ def mostrar_jugador_es_de_salon_fama(nombre, lista_jugadores):
     print(texto.format(nombre))
 
 def es_jugador_salon_fama(nombre, lista_jugadores):
-    jugadores = encontrar_jugadores_por_clave(lista_jugadores, "nombre", nombre)
+    jugadores = encontrar_jugadores_por_clave(lista_jugadores, constantes.NOMBRE, nombre)
     if len(jugadores) != 0:
         jugador = jugadores[0] # Si no viene vacía, tiene un único elemento, porque la validación previa checkea que se ingrese un nombre completo. 
                                # Solo traería más de 1 si hubiese varios jugadores con el mismo nombre
