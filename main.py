@@ -5,43 +5,6 @@ from Archivos.archivos import leer_archivo
 from menu import *
 import constantes
 
-
-
-def pedir_indice(cantidad_jugadores):
-    """
-        Solicita un índice para un jugador y lo devuelve una vez validado
-
-        Parámetros: 
-        cantidad_jugadores(int): La cantidad de jugadores, para hacer la validación
-
-        Devuelve: El índice resultante (int)
-    """
-    indice = input("Ingrese un índice.")
-    return validar_indice(indice, cantidad_jugadores)
-
-def pedir_nombre(nombre_completo):
-    """
-    Solicita un nombre para un jugador y lo devuelve una vez validado
-
-    Parámetros: 
-    nombre_completo(bool): Utilizado para la validación, determina si debería buscarse por nombre completo o por coincidencia de comienzo
-
-    Devuelve: El nombre resultante (str)
-    """
-    nombre = input("Ingrese un nombre: ")
-    return validar_nombre(nombre, nombre_completo)
-
-def pedir_valor_para_promedio():
-    """
-        Solicita un valor para las comparaciones de promedio y lo devuelve una vez validado
-
-        Parámetros: No tiene
-
-        Devuelve: El valor resultante(int). El mismo será un numero positivo
-    """
-    valor = input("Ingrese un valor para el promedio: ")
-    return validar_valor(valor)
-
 def main():
     lista_jugadores = leer_archivo("dt", "json")
     cantidad_jugadores = len(lista_jugadores)
@@ -105,7 +68,7 @@ def main():
             case 0:
                 continuar = False
 
-        input("Presione enter para continuar.")
+        input("Presione enter para continuar.\n")
 
 main()
 
