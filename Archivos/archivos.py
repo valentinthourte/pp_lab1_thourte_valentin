@@ -31,7 +31,7 @@ def parse_json(archivo):
         list: Una lista de diccionarios que contiene la información de los jugadores leída desde el archivo.
     """
     nombre_archivo = f"{archivo}.json"
-    with open(nombre_archivo, "r") as archivo_json:
+    with open(nombre_archivo, "r", encoding="utf-8") as archivo_json:
         data = json.load(archivo_json)
     return data["jugadores"]
 
