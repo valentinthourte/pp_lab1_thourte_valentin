@@ -18,3 +18,4 @@ PORCENTAJE_TIROS_TRIPLES = "porcentaje_tiros_triples"
 ESTADISTICAS = "estadisticas"
 LOGROS = "logros"
 RANKINGS = "rankings"
+LISTA_POSICIONES = ["Base", "Escolta", "Alero", "Ala-Pivot", "Pivot"]

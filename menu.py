@@ -1,12 +1,29 @@
-from Validaciones.validaciones_texto import *
+from Validaciones.validaciones import *
 from Funciones.funciones_mostrar import imprimir
 
 def menu_principal(texto_input):
+    """
+    Muestra el menú principal y solicita al usuario que ingrese una opción. 
+
+    Recibe:
+    - texto_input: Texto que se muestra al solicitar la opción al usuario.
+
+    Devuelve:
+    - Opción ingresada por el usuario como entero. Si la opcion no es valida, se vuelve a solicitar hasta que lo sea.
+    """
     cantidad_opciones = imprimir_menu_parcial()
     opcion = input(texto_input)
     return validar_opcion(opcion, cantidad_opciones)
 
 def imprimir_menu_parcial():
+    """
+    Imprime el menú principal y devuelve la cantidad de opciones disponibles.
+
+    No recibe ningún parámetro.
+
+    Devuelve:
+    - Cantidad de opciones disponibles en el menú como entero.
+    """
     lista_opciones = [
     "1. Mostrar la lista de todos los jugadores del Dream Team.",
     "2. Seleccionar un jugador por su índice y mostrar sus estadísticas completas.",
@@ -34,13 +51,29 @@ def imprimir_menu_parcial():
     imprimir_menu(lista_opciones)
     return len(lista_opciones)
 
-def pedir_opcion_hasta__que_sea_valida(texto_input = "Ingrese una opción para continuar: "):
+def pedir_opcion_hasta__que_sea_valida(texto_input="Ingrese una opción para continuar: "):
+    """
+    Solicita al usuario que ingrese una opción válida del menú principal hasta que lo haga.
+
+    Recibe:
+    - texto_input: Texto que se muestra al solicitar la opción al usuario.
+
+    Devuelve:
+    - Opción válida ingresada por el usuario como entero.
+    """
     opcion = menu_principal(texto_input)
     while opcion == -1:
         opcion = menu_principal(texto_input)
     return int(opcion)
 
-
 def imprimir_menu(lista):
+    """
+    Imprime el menú con las opciones disponibles.
+
+    Recibe:
+    - lista: Lista de las opciones del menú a imprimir.
+
+    No devuelve ningún valor.
+    """
     for opcion in lista:
         imprimir([opcion])
