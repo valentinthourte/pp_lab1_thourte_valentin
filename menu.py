@@ -46,10 +46,14 @@ def imprimir_menu_parcial():
     "19. Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas.",
     "20. Mostrar jugadores ordenados por posición en la cancha con porcentaje de tiros de campo superior a un valor dado.",
     "21. Guardar rankings de jugadores a csv.",
+    "22. Mostrar la cantidad de jugadores que hay por cada posición.",
+    "23. Mostrar la lista de jugadores ordenadas por la cantidad de All-Star de forma descendente",
+    "24. Determinar qué jugador tiene las mejores estadísticas en cada valor.",
+    "25. Mostrar el jugador con mejores estadísticas.",
     "0. Salir"
     ]
     imprimir_menu(lista_opciones)
-    return len(lista_opciones)
+    return len(lista_opciones) - 1
 
 def pedir_opcion_hasta__que_sea_valida(texto_input="Ingrese una opción para continuar: "):
     """

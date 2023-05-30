@@ -65,6 +65,14 @@ def main():
                 mostrar_jugadores_promedian_mas_porcentaje_tiros_campo_por_posicion(lista_jugadores, valor)
             case 21:
                 guardar_ranking_jugadores(lista_jugadores, lista_rankings)
+            case 22:
+                mostrar_cantidad_jugadores_por_posicion(lista_jugadores)
+            case 23:
+                mostrar_jugadores_ordenados_por_cantidad_AllStar(lista_jugadores)
+            case 24:
+                mostrar_jugador_mejor_estadistica_por_estadistica(lista_jugadores)
+            case 25:
+                mostrar_mejor_jugador_estadisticamente(lista_jugadores)
             case 0:
                 continuar = False
 

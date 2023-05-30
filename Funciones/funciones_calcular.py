@@ -1,5 +1,7 @@
 from Pantalla.imprimir import imprimir
+from Funciones.funciones_encontrar import encontrar_jugadores_por_clave
 import constantes
+import re
 
 
 def ordenar(lista, clave, logica, ascendente):
@@ -22,13 +24,27 @@ def ordenar(lista, clave, logica, ascendente):
         for i in range(len(lista) - 1):
             actual = lista[i]
             proximo = lista[i+1]
-            if logica(actual, proximo, clave) == ascendente:
+            if logica(actual, proximo, clave, ascendente) == ascendente:
                 lista[i] = proximo
                 lista[i + 1] = actual
                 ordenar = True
     return lista
 
+def obtener_mejor_por_estadistica(estadistica, lista_jugadores):
+    ordenada = ordenar_por_estadistica(lista_jugadores, estadistica, False)
+    return ordenada[0]
 
+def obtener_mejores(lista_jugadores):
+    mejores = []
+    for estadistica in constantes.LISTA_ESTADISTICAS:
+        mejor = obtener_mejor_por_estadistica(estadistica, lista_jugadores)
+        diccio_mejor = {
+            constantes.NOMBRE: mejor[constantes.NOMBRE],
+            constantes.CLAVE_MEJOR_EN: estadistica,
+            constantes.CLAVE_CANTIDAD_MEJOR: mejor[constantes.ESTADISTICAS][estadistica],
+        }
+        mejores.append(diccio_mejor)
+    return mejores
 
 def ordenar_por_key(lista, clave, ascendente=True):
     """
@@ -43,7 +59,9 @@ def ordenar_por_key(lista, clave, ascendente=True):
     Returns:
         list: La lista ordenada por la clave especificada.
     """
-    def logica_por_key(actual, proximo, clave):
+    def logica_por_key(actual, proximo, clave, ascendente):
+        if actual[clave] == proximo[clave]:
+            return not ascendente
         return actual[clave] > proximo[clave]
     
     return ordenar(lista, clave, logica_por_key, ascendente)
@@ -62,12 +80,16 @@ def ordenar_por_estadistica(lista, clave, ascendente=True):
     Returns:
         list: La lista ordenada por la estadística especificada.
     """
-    def logica_por_estadistica(actual, proximo, clave):
+    def logica_por_estadistica(actual, proximo, clave, ascendente):
+        if actual[constantes.ESTADISTICAS][clave] == proximo[constantes.ESTADISTICAS][clave]:
+            return not ascendente
         return actual[constantes.ESTADISTICAS][clave] > proximo[constantes.ESTADISTICAS][clave]
     return ordenar(lista, clave, logica_por_estadistica, ascendente)    
 
 def ordenar_por_posicion_cancha(lista, clave, ascendente=True):
-    def logica_por_posicion(actual, proximo, clave):
+    def logica_por_posicion(actual, proximo, clave, ascendente):
+        if constantes.LISTA_POSICIONES.index(actual[clave]) == constantes.LISTA_POSICIONES.index(proximo[clave]):
+            return not ascendente
         return constantes.LISTA_POSICIONES.index(actual[clave]) > constantes.LISTA_POSICIONES.index(proximo[clave])
     return ordenar(lista, clave, logica_por_posicion, ascendente)
 
@@ -199,6 +221,19 @@ def clave_y_ranking_parseadas(jugador, clave):
     clave_parseada = parsear_dato(clave)
     return f"{clave_parseada}: {dato}"
 
+def agregar_clave_y_valor(lista, clave, valor):
+    for elemento in lista:
+        elemento[clave] = valor
+    return lista
+
+def obtener_mejor_estadisticamente(lista_jugadores):
+    mejores = obtener_mejores(lista_jugadores)
+    lista_jugadores_modificados = agregar_clave_y_valor(lista_jugadores, constantes.CLAVE_CANTIDAD_ESTADISTICAS_MEJOR, 0)
+    for mejor in mejores:
+        jugador = encontrar_jugadores_por_clave(lista_jugadores, constantes.NOMBRE, mejor[constantes.NOMBRE])[0]
+        jugador[constantes.CLAVE_CANTIDAD_ESTADISTICAS_MEJOR] += 1
+    ordenados =  ordenar_por_key(lista_jugadores_modificados, constantes.CLAVE_CANTIDAD_ESTADISTICAS_MEJOR, False)
+    return ordenados[0]
 
 def parsear_dato(estadistica):
     """
@@ -247,7 +282,7 @@ def get_jugador_mas_por_clave(clave, lista):
     - dict: El diccionario del jugador con el valor más alto de la clave.
 
     """
-    for i in range(len(lista) - 1):
+    for i in range(len(lista)):
         jugador = lista[i]
         if i == 0:
             jugador_mas = jugador
@@ -269,7 +304,7 @@ def get_jugador_menos_por_clave(clave, lista):
     - dict: El diccionario del jugador con el valor más bajo de la clave.
 
     """
-    for i in range(len(lista) - 1):
+    for i in range(len(lista)):
         jugador = lista[i]
         if i == 0:
             jugador_menos = jugador
@@ -290,7 +325,7 @@ def get_jugador_mas_longitud_clave(lista_jugadores, clave):
     - dict: El diccionario del jugador con el valor más largo en la clave especificada.
 
     """
-    for i in range(len(lista_jugadores) - 1):
+    for i in range(len(lista_jugadores)):
         jugador = lista_jugadores[i]
         if i == 0:
             jugador_mas = jugador
@@ -358,10 +393,13 @@ def parsear_estadisticas(estadisticas):
     """
     linea = ""
     for clave in estadisticas:
-        clave_parseada = clave.capitalize().replace("_", " ")
+        clave_parseada = parsear_clave(clave)
         linea = f"{linea} {clave_parseada}: {estadisticas[clave]} |"
     return linea
 
+
+def parsear_clave(clave):
+    return clave.capitalize().replace("_", " ")
 
 def obtener_jugador_con_mas_logros(lista_jugadores):
     """
@@ -391,6 +429,39 @@ def estadisticas_por_indice(jugadores, indice):
     estadisticas = parsear_estadisticas(jugador[constantes.ESTADISTICAS])
     imprimir([nombre_jugador, estadisticas])
 
+def obtener_cantidades_por_clave(clave, lista_jugadores):
+    """
+        Retorna un diccionario cuyas claves corresponden a los distintos valores de la clave, y el valor representa la cantidad de apariciones de dicho valor en la lista de jugadores
+
+        Recibe:
+        - clave: La clave sobre la cual buscar y agrupar.
+        - lista_jugadores: La lista de jugadores.
+
+        Retorna: El diccionario con las cantidades.
+    """
+    cantidades = {}
+    for jugador in lista_jugadores:
+        valor = jugador[clave]
+        if valor not in cantidades:
+            cantidades[valor] = 0
+        cantidades[valor] += 1
+    return cantidades
+
+def obtener_jugadores_y_cantidad_Allstar(lista_jugadores):
+    for jugador in lista_jugadores:
+        cantidad_allstar = obtener_cantidad_veces_allstar(jugador)
+        jugador[constantes.CLAVE_CANTIDAD_ALLSTAR] = cantidad_allstar
+    return lista_jugadores
+
+def obtener_cantidad_veces_allstar(jugador):
+    logros = jugador[constantes.LOGROS]
+    patron = r";([0-9]+) " + f"{constantes.VECES_ALL_STAR}"
+    texto = ";".join(logros)
+    ocurrencias = re.findall(patron, texto)
+    if len(ocurrencias) > 0:
+        return int(ocurrencias[0])
+    return 0
+        
 
 def obtener_jugador_mas_temporadas_jugadas(lista_jugadores):
     """

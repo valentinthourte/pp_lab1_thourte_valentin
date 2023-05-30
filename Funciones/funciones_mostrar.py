@@ -337,3 +337,37 @@ def imprimir_nombre_y_posicion_jugadores(jugadores):
     """
     for jugador in jugadores:
         print(obtener_nombre_y_datos(jugador, [constantes.POSICION]))
+
+def mostrar_cantidad_jugadores_por_posicion(lista_jugadores):
+    """
+        Obtiene e imprime las cantidades de jugadores por posicion agrupadas por valor
+
+        Recibe:
+        - lista_jugadores: la lista de jugadores
+
+        Retorna: Nada
+    """
+    cantidades = obtener_cantidades_por_clave(constantes.POSICION, lista_jugadores)
+    for clave in cantidades:
+        imprimir([f"{clave}: {cantidades[clave]}"])
+
+def mostrar_jugadores_ordenados_por_cantidad_AllStar(lista_jugadores):
+    cantidades_allstar = obtener_jugadores_y_cantidad_Allstar(lista_jugadores)
+    jugadores_ordenados = ordenar_por_key(cantidades_allstar, constantes.CLAVE_CANTIDAD_ALLSTAR, False)
+    for jugador in jugadores_ordenados:
+        imprimir([f"{jugador[constantes.NOMBRE]} ({jugador[constantes.CLAVE_CANTIDAD_ALLSTAR]} veces All Star)"])
+
+def mostrar_jugador_mejor_estadistica_por_estadistica(lista_jugadores):
+    mejores = obtener_mejores(lista_jugadores)
+    lineas = []
+    for jugador in mejores:
+        lineas.append(obtener_linea_mejor(jugador))
+    imprimir(lineas)
+
+def mostrar_mejor_jugador_estadisticamente(lista_jugadores):
+    mejor = obtener_mejor_estadisticamente(lista_jugadores)
+    imprimir([f"El mejor jugador estadísticamente es {obtener_nombre_y_estadisticas(mejor, constantes.LISTA_ESTADISTICAS)}\n Es el mejor en {mejor[constantes.CLAVE_CANTIDAD_ESTADISTICAS_MEJOR]} estadísticas."])
+
+
+def obtener_linea_mejor(jugador):
+    return f"Mayor cantidad de {parsear_clave(jugador[constantes.CLAVE_MEJOR_EN])}: {jugador[constantes.NOMBRE]} ({jugador[constantes.CLAVE_CANTIDAD_MEJOR]})"
